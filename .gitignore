@@ -6,6 +6,11 @@ __pycache__/
 # C extensions
 *.so
 
+# parquet files
+*.parquet
+
+*.csv
+
 # Distribution / packaging
 .Python
 build/
@@ -151,6 +156,10 @@ activemq-data/
 .env
 .envrc
 .venv
+#because i miskaenly named venv as vnev
+.vnev
+vnev/
+
 env/
 venv/
 ENV/
