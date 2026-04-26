@@ -1,0 +1,30 @@
+{
+  "winner": "XGBoost",
+  "test_auc": 0.7835,
+  "cv_auc": 0.7948,
+  "features": [
+    "activity_span_days",
+    "total_interactions",
+    "unique_products",
+    "view_count",
+    "total_weight",
+    "view_to_purchase_ratio",
+    "cart_count",
+    "cart_to_purchase_ratio",
+    "cart_abandonment_rate",
+    "wishlist_count",
+    "interactions_per_day",
+    "wishlist_to_purchase_ratio"
+  ],
+  "params": {
+    "subsample": "0.6",
+    "reg_lambda": "1.5",
+    "reg_alpha": "0",
+    "n_estimators": "300",
+    "min_child_weight": "7",
+    "max_depth": "3",
+    "learning_rate": "0.01",
+    "gamma": "0.2",
+    "colsample_bytree": "0.8"
+  }
+}
