@@ -10,13 +10,13 @@ from datetime import datetime, timedelta
 
 np.random.seed(42)
 
-# ── CONFIG ────────────────────────────────────────────────────────────────────
+#CONFIG 
 N_USERS = 10_000
 START_DATE = datetime(2024, 1, 1)
 END_DATE = datetime(2024, 12, 31)
 TOTAL_DAYS = (END_DATE - START_DATE).days
 
-# ── USER ARCHETYPES ───────────────────────────────────────────────────────────
+#USER ARCHETYPES 
 # Each archetype defines realistic behavioral parameters
 ARCHETYPES = {
     "champion": {
@@ -82,7 +82,7 @@ ARCHETYPES = {
 }
 
 
-# ── GENERATOR ─────────────────────────────────────────────────────────────────
+#GENERATOR 
 def generate_session_events(user_id, session_start, n_events, archetype):
     events = []
     current_time = session_start
@@ -191,7 +191,7 @@ def _hour_weights():
     return weights / weights.sum()
 
 
-# ── ASSIGN ARCHETYPES & GENERATE ──────────────────────────────────────────────
+#ASSIGN ARCHETYPES & GENERATE 
 archetype_names = list(ARCHETYPES.keys())
 archetype_probs = [ARCHETYPES[a]["pct"] for a in archetype_names]
 
@@ -203,12 +203,12 @@ for user_id, archetype_name in enumerate(assigned):
     events = generate_user(user_id, archetype_name, archetype)
     all_events.extend(events)
 
-# ── BUILD DATAFRAME ───────────────────────────────────────────────────────────
+#BUILD DATAFRAME 
 df = pd.DataFrame(all_events)
 df = df.sort_values("interaction_timestamp").reset_index(drop=True)
 df["interaction_timestamp"] = pd.to_datetime(df["interaction_timestamp"])
 
-# ── SANITY CHECKS ─────────────────────────────────────────────────────────────
+#SANITY CHECKS 
 print("Generated shape:", df.shape)
 print("\nEvent type distribution:")
 print(df["interaction_type"].value_counts())
@@ -223,7 +223,7 @@ archetype_df = pd.DataFrame({"user_id": range(N_USERS), "archetype": assigned})
 print("\nArchetype distribution:")
 print(archetype_df["archetype"].value_counts())
 
-# ── SAVE ──────────────────────────────────────────────────────────────────────
+#SAVE 
 df.to_csv("data/raw/synthetic_events.csv", index=False)
 archetype_df.to_csv("data/raw/synthetic_archetypes.csv", index=False)
 

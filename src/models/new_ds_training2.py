@@ -56,7 +56,7 @@ scale = (y_train == 0).sum() / (y_train == 1).sum()
 print(f"Train: {X_train.shape}  Test: {X_test.shape}")
 print(f"scale_pos_weight: {scale:.3f}\n")
 
-# ── 2. SEARCH SPACES ──────────────────────────────────────────────────────────
+# 2. SEARCH SPACES
 xgb_params = {
     "n_estimators": [200, 300, 400, 500],
     "max_depth": [3, 4, 5, 6, 7],
@@ -81,7 +81,7 @@ lgbm_params = {
     "num_leaves": [20, 31, 50, 70, 100],
 }
 
-# ── 3. BASE ESTIMATORS ────────────────────────────────────────────────────────
+# 3. BASE ESTIMATORS
 base_models = {
     "XGBoost": XGBClassifier(
         scale_pos_weight=scale,
@@ -101,7 +101,7 @@ param_spaces = {
     "LightGBM": lgbm_params,
 }
 
-# ── 4. TUNE BOTH MODELS ───────────────────────────────────────────────────────
+# 4. TUNE BOTH MODELS
 tuned = {}
 
 for name, base in base_models.items():
@@ -145,7 +145,7 @@ for name, base in base_models.items():
         "params": search.best_params_,
     }
 
-# ── 5. COMPARE ────────────────────────────────────────────────────────────────
+# 5. COMPARE
 print(f"\n{'='*55}")
 print("  FINAL COMPARISON")
 print(f"{'='*55}")
@@ -157,7 +157,7 @@ winner_name = max(tuned, key=lambda k: tuned[k]["auc"])
 winner = tuned[winner_name]
 print(f"\nWinner: {winner_name} (Test AUC={winner['auc']:.4f})")
 
-# ── 6. THRESHOLD ANALYSIS ON WINNER ──────────────────────────────────────────
+# 6. THRESHOLD ANALYSIS ON WINNER
 print(f"\nThreshold analysis — {winner_name}:")
 print(f"{'Threshold':>10} {'Precision':>10} {'Recall':>10} {'F1':>10}")
 for thresh in [0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60]:
@@ -167,7 +167,7 @@ for thresh in [0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60]:
     f = f1_score(y_test, y_t)
     print(f"{thresh:>10.2f} {p:>10.3f} {r:>10.3f} {f:>10.3f}")
 
-# ── 7. FEATURE IMPORTANCE — WINNER ───────────────────────────────────────────
+# 7. FEATURE IMPORTANCE, WINNER
 importance_df = pd.DataFrame(
     {
         "feature": FEATURES,
@@ -178,10 +178,10 @@ importance_df = pd.DataFrame(
 print(f"\nFeature importances ({winner_name}):")
 print(importance_df.to_string(index=False))
 
-# ── 8. PLOTS ──────────────────────────────────────────────────────────────────
+# 8. PLOTS
 fig, axes = plt.subplots(1, 4, figsize=(24, 5))
 
-# ROC curves — both models
+# ROC curves, both models
 for name, res in tuned.items():
     RocCurveDisplay.from_predictions(
         y_test, res["y_pred_prob"], name=f"{name} (AUC={res['auc']:.4f})", ax=axes[0]
@@ -198,7 +198,7 @@ for i, (name, res) in enumerate(tuned.items()):
     )
     axes[i + 1].set_title(f"{name}\nAUC={res['auc']:.4f}")
 
-# Feature importance — winner
+# Feature importance  winner
 importance_df.plot.barh(
     x="feature", y="importance", ax=axes[3], legend=False, color="steelblue"
 )
@@ -211,7 +211,7 @@ plt.savefig(
 )
 print("\nPlot saved: tuned_model_comparison.png")
 
-# ── 9. SAVE BOTH MODELS + WINNER FLAG ────────────────────────────────────────
+# 9. SAVE BOTH MODELS + WINNER FLAG
 for name, res in tuned.items():
     fname = f"models/{'xgb' if name == 'XGBoost' else 'lgbm'}_churn_tuned.pkl"
     joblib.dump(res["model"], fname)

@@ -9,3 +9,4 @@ pyarrow==23.0.1
 seaborn==0.13.0
 xgboost==2.0.0
 fastparquet==2026.3.0
+lightgbm==4.3.0

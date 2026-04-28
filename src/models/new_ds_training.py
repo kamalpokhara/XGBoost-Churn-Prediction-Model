@@ -18,7 +18,7 @@ import matplotlib
 
 matplotlib.use("Agg")  # avoids tkinter crash
 
-# ── 1. LOAD ───────────────────────────────────────────────────────────────────
+# 1. LOAD 
 features = pd.read_parquet("new_ds_churn_features_final.parquet")
 
 FEATURES = [
@@ -43,17 +43,17 @@ print("Feature set shape:", X.shape)
 print("Churn distribution:")
 print(y.value_counts(normalize=True).round(3))
 
-# ── 2. SPLIT ──────────────────────────────────────────────────────────────────
+# 2. SPLIT 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42, stratify=y
 )
 print(f"\nTrain: {X_train.shape}  Test: {X_test.shape}")
 
-# ── 3. CLASS IMBALANCE WEIGHT ─────────────────────────────────────────────────
+# 3. CLASS IMBALANCE WEIGHT 
 scale = (y_train == 0).sum() / (y_train == 1).sum()
 print(f"scale_pos_weight: {scale:.3f}")
 
-# ── 4. MODELS ─────────────────────────────────────────────────────────────────
+# 4. MODELS 
 models = {
     "XGBoost": XGBClassifier(
         n_estimators=300,
@@ -78,7 +78,7 @@ models = {
     ),
 }
 
-# ── 5. TRAIN & EVALUATE ───────────────────────────────────────────────────────
+# 5. TRAIN & EVALUATE 
 results = {}
 
 for name, model in models.items():
@@ -104,7 +104,7 @@ for name, model in models.items():
         "y_pred_prob": y_pred_prob,
     }
 
-# ── 6. FEATURE IMPORTANCE ─────────────────────────────────────────────────────
+# 6. FEATURE IMPORTANCE 
 best_name = max(results, key=lambda k: results[k]["auc"])
 best_model = results[best_name]["model"]
 print(f"\nBest model: {best_name} (AUC={results[best_name]['auc']:.4f})")
@@ -119,7 +119,7 @@ importance_df = pd.DataFrame(
 print("\nFeature importances:")
 print(importance_df.to_string(index=False))
 
-# ── 7. PLOTS ──────────────────────────────────────────────────────────────────
+# 7. PLOTS 
 fig, axes = plt.subplots(1, 3, figsize=(18, 5))
 
 for i, (name, res) in enumerate(results.items()):
