@@ -13,9 +13,6 @@ For the complete implementation: from user interactions on the e‑commerce site
 ### [YOU CAN FIND ML RELATED PROJECT IN THIS ACCOUNT]
 ---
 
-### Note
-We recently discovered a **data leakage issue** in the churn prediction model (identified on **26th July**).  
-A fix is in progress — meanwhile, all other components and workflows are stable and can be used as reference for architecture and integration patterns.
 
 ---
 
